@@ -1,0 +1,33 @@
+<div class="container" style="text-align:start">
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="jumbotron col-lg-4">
+            <h2>Login</h2>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-horizontal" autocomplete="on">
+                <div class="form-group">
+                    <label for="emailuser" class="col-lg-8 control-label">Email user</label>
+                    <input type="email" formControlName="emailuser" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.emailuser.errors }" />
+                    <div *ngIf="submitted && f.emailuser.errors" class="invalid-feedback col-lg-4">
+                        <div *ngIf="f.emailuser.errors.required">Email user is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="passworduser" class="col-lg-8 control-label">Password</label>
+                    <input type="password" formControlName="passworduser" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.passworduser.errors }" />
+                    <div *ngIf="submitted && f.passworduser.errors" class="invalid-feedback col-lg-4">
+                        <div *ngIf="f.passworduser.errors.required">Password is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button [disabled]="loading" class="btn btn-primary mr-1">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Login
+                    </button>
+                    <a type="button" (click)="register()" class="btn btn-link">Register</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

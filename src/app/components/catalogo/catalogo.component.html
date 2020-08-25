@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Catalogo Articulos</title>
+</head>
+
+<body>
+    <div class="row container-fluid ml-1">
+        <div class="col">
+            <div class="row">
+                <form [formGroup]="catalogoForm" autocomplete="on" class="form-inline align-items-center">
+                    <label class="sr-only">Grupo</label>
+                    <input type="text" style="text-transform:uppercase;" class="form-control mb-2 mr-sm-2"
+                        formControlName="grupo" [(ngModel)]="catalogoService.selectCatalogo.grupo"
+                        placeholder="Grupo">
+                    <label class="sr-only">Clave de articulo</label>
+                    <input type="text" style="text-transform:uppercase;" class="form-control mb-2 mr-sm-2"
+                        formControlName="claveart" [(ngModel)]="catalogoService.selectCatalogo.claveart"
+                        placeholder="Clave de articulo">
+                    <label class="sr-only">Articulo</label>
+                    <input type="text" class="form-control mb-2 mr-sm-2" formControlName="articulo"
+                        [(ngModel)]="catalogoService.selectCatalogo.articulo" placeholder="ARTICULO">
+                    <button [disabled]="loading" type="submit" class="btn btn-primary mb-2" (click)="buscar()">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Buscar</button>
+                </form>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2">
+                <div *ngFor="let art of Articulos" class="list-group">
+                    <div class="card mb-3">
+                        <h3 class="card-header">{{ art?.grupo }}</h3>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ art?.claveart }}</h5>
+                        </div>
+                        <img class="img-fluid rounded float-left img-thumbnail" src="{{ art?.urlimagen }}"
+                            style="max-width:100%;width:auto;height:auto;">
+                        <div class="card-body row">
+                            <h5><p class="card-text">{{ art?.articulo }}</p></h5>
+                        </div>
+                        <div class="card-footer row">
+                           <h3>{{ art?.precio | currency }}</h3>
+                        </div>
+                        <div class="card-footer row">
+                            <input class="mr-1" id="cantidad" type="number" aria-valuemin="1" value="1">
+                            <button [disabled]="loading" class="btn btn-primary" (click)="addCarrito(art)">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+                                agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

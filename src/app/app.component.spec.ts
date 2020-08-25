@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'angular-pwa-sp'`, () => {
+  it(`should have as title 'pwa-gmayas-angular'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-pwa-sp');
+    expect(app.title).toEqual('pwa-gmayas-angular');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('angular-pwa-sp app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('pwa-gmayas-angular app is running!');
   });
 });
