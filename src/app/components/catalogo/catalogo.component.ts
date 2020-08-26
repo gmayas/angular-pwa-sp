@@ -34,7 +34,7 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
     private router: Router, private toastr: ToastrService) {
     this.user = this.auth.user();
     //console.log('this.user.id: ', _.get(this.user.value, 'id'))
-    this.getCatalogoDesc();
+    this.getCatalogo(null);
   }
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges() {
     this.user = this.auth.user();
-    this.getCatalogoDesc();
+    this.getCatalogo(null);
   }
   // convenience getter for easy access to form fields
   get f() { return this.catalogoForm.controls; }
@@ -83,8 +83,8 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
 
   addCarrito(art: any) {
     this.catalogoService.selectCatalogo = Object.assign({}, art);
-    let cantidad = parseFloat((document.getElementById("cantidad") as HTMLInputElement).value);
-    this.catalogoService.selectCatalogo.cantidad = cantidad
+    //let cantidad = parseFloat((document.getElementById("cantidad") as HTMLInputElement).value);
+    //this.catalogoService.selectCatalogo.cantidad = cantidad
     console.log('add selectCatalogo: ', this.catalogoService.selectCatalogo)
     this.carritoService.addCarrito(this.catalogoService.selectCatalogo);
     this.submitted = false;
@@ -113,22 +113,21 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
           this.loading = false;
           this.onReset();
         }, error => {
-          this.auth.logout();
-          this.router.navigate(['home']);
           this.toastr.success('Hello: Your session has expired, just log in again.', 'Aviso de Angular 9', {
             timeOut: 10000,
             positionClass: 'toast-bottom-right'
           });
-
+          this.auth.logout();
+          this.router.navigate(['home']);
         });
     } catch (e) {
       console.log('error: ', e);
     }
   }
 
-  getCatalogoDesc() {
+  getCatalogo(id: any) {
     try {
-      this.catalogoService.getCatalogoDesc()
+      this.catalogoService.getCatalogo(id)
         .subscribe((data: any) => {
           //console.log('data: ', data);
           this.Articulos = data.data;
@@ -137,12 +136,12 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
             positionClass: 'toast-bottom-right'
           });
         }, error => {
-          this.auth.logout();
-          this.router.navigate(['home']);
           this.toastr.success('Hello: Your session has expired, just log in again.', 'Aviso de Angular 9', {
             timeOut: 10000,
             positionClass: 'toast-bottom-right'
           });
+          this.auth.logout();
+          this.router.navigate(['home']);
         });
     } catch (e) {
       console.log('error: ', e);

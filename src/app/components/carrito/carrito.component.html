@@ -1,1 +1,138 @@
-<p>carrito works!</p>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Carrito</title>
+</head>
+
+<body>
+    <div class="row container-fluid ml-1">
+        <div class="col">
+            <div class="container-block list-group row">
+                <a class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Su carrito: </h5>
+                        <h5 class="mb-1">{{ Articulos.length }} items</h5>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between">
+                        <small class="mb-1">Folio: </small>
+                        <small class="mb-1">{{ Folio }}</small>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Fecha: </h5>
+                        <h5 class="mb-1">{{ Fecha | date: 'dd/MM/yyyy' }}</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2">
+                <div *ngFor="let art of Articulos" class="list-group">
+                    <a class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <img class="img-fluid rounded float-left img-thumbnail" src="{{ art?.urlimagen }}"
+                                    style="max-width:100%;width:auto;height:auto;">
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ art?.claveart }}</h5>
+                                    <small>Grupo: {{ art?.grupo }}</small>
+                                </div>
+                                <p class="mb-1">{{ art?.articulo }}</p>
+                                <small>Impuesto: {{ art?.impuesto }} %</small>
+                                <div class="mt-2 d-flex w-100 justify-content-between">
+                                    <label class="mr-1">Precio:</label>
+                                    <h5>{{ art?.precio | currency }}</h5>
+                                </div>
+                                <div class="d-flex w-100 justify-content-between">
+                                    <label class="mr-1">Cantidad:</label>
+                                    <h5>{{ art?.cantidad |  number: '0.2' }}</h5>
+                                </div>
+                                <div class="d-flex w-100 justify-content-between">
+                                    <label class="mr-1">Importe:</label>
+                                    <h5>{{ art?.importe | currency }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="container-block list-group row">
+                <a class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <label class="mb-1"> Sub-Total 0%:</label>
+                        <h5 class="mb-1">{{ Resumen?.subTotalT0 | currency }}</h5>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between">
+                        <label class="mb-1"> Sub-Total 16%:</label>
+                        <h5 class="mb-1">{{ Resumen?.subTotalT16 | currency }}</h5>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between">
+                        <label class="mb-1"> IVA 16%:</label>
+                        <h5 class="mb-1">{{ Resumen?.iva16 | currency }}</h5>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Total:</h5>
+                        <h3 class="mb-1">{{ Resumen?.Total | currency }}</h3>
+                    </div>
+                    <div *ngIf="Articulos.length>0" class="d-flex w-100 justify-content-between">
+                        <button [disabled]="loading" type="submit" class="btn btn-primary" data-toggle="modal"
+                            data-target="#exampleModal">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" data-toggle="modal"
+                                data-target="#exampleModal"></span>Registrar carrito</button>
+                        <button [disabled]="loading" class="btn btn-danger" (click)="cancelarCarrito()">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Borrar carrito</button>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Aviso de Angular 9.</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex w-100 justify-content-between">
+                            <label class="mb-1">Su carrito: </label>
+                            <label class="mb-1">{{ Articulos.length }} items</label>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <small class="mb-1">Folio: </small>
+                            <small class="mb-1">{{ Folio }}</small>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <label class="mb-1">Fecha: </label>
+                            <label class="mb-1">{{ Fecha | date: 'dd/MM/yyyy' }}</label>
+                        </div><div class="d-flex w-100 justify-content-between">
+                            <label class="mb-1"> Sub-Total 0%:</label>
+                            <label class="mb-1">{{ Resumen?.subTotalT0 | currency }}</label>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <label class="mb-1"> Sub-Total 16%:</label>
+                            <label class="mb-1">{{ Resumen?.subTotalT16 | currency }}</label>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <label class="mb-1"> IVA 16%:</label>
+                            <label class="mb-1">{{ Resumen?.iva16 | currency }}</label>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <label class="mb-1"><strong>Total:</strong></label>
+                            <label class="mb-1"><strong>{{ Resumen?.Total | currency }}</strong></label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" (click)="registrarCarrito()">Registrar carrito</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

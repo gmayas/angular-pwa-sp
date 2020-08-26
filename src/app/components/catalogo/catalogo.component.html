@@ -12,8 +12,7 @@
                 <form [formGroup]="catalogoForm" autocomplete="on" class="form-inline align-items-center">
                     <label class="sr-only">Grupo</label>
                     <input type="text" style="text-transform:uppercase;" class="form-control mb-2 mr-sm-2"
-                        formControlName="grupo" [(ngModel)]="catalogoService.selectCatalogo.grupo"
-                        placeholder="Grupo">
+                        formControlName="grupo" [(ngModel)]="catalogoService.selectCatalogo.grupo" placeholder="Grupo">
                     <label class="sr-only">Clave de articulo</label>
                     <input type="text" style="text-transform:uppercase;" class="form-control mb-2 mr-sm-2"
                         formControlName="claveart" [(ngModel)]="catalogoService.selectCatalogo.claveart"
@@ -35,17 +34,26 @@
                         <img class="img-fluid rounded float-left img-thumbnail" src="{{ art?.urlimagen }}"
                             style="max-width:100%;width:auto;height:auto;">
                         <div class="card-body row">
-                            <h5><p class="card-text">{{ art?.articulo }}</p></h5>
+                            <h5>
+                                <p class="card-text">{{ art?.articulo }}</p>
+                            </h5>
                         </div>
                         <div class="card-footer row">
-                           <h3>{{ art?.precio | currency }}</h3>
+                            <div class="d-flex w-100 justify-content-between">
+                                <label class="mr-1">Precio:</label>
+                                <h3>{{ art?.precio | currency }}</h3>
+                            </div>
                         </div>
                         <div class="card-footer row">
-                            <input class="mr-1" id="cantidad" type="number" aria-valuemin="1" value="1">
-                            <button [disabled]="loading" class="btn btn-primary" (click)="addCarrito(art)">
-                                <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
-                                agregar
-                            </button>
+                            <label class="mr-1">Cantidad:</label>
+                            <div class="d-flex w-100 justify-content-between">
+                                <input class="mr-1" type="number" placeholder="0.00" [(ngModel)]="art.cantidad">
+                                <button *ngIf="art.cantidad>0" [disabled]="loading" class="btn btn-primary"
+                                    (click)="addCarrito(art)">
+                                    <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+                                    agregar
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -55,11 +55,18 @@ export class CarritoService {
     let fecha = new Date();
     let detalle: any = [];
     let carrito: any = {}
+    if (!( Number(selectCatalogo.impuesto) == 0 || Number(selectCatalogo.impuesto) == 16 )){
+      this.toastr.warning('Hola: No se reconoce el impuesto del articulo.', 'Aviso de Angular 9', {
+        timeOut: 10000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
     let newDetalle: any = [{
       index: 0,
       idItem: new Date().getTime(),
       userid: user.id,
-      folio: _.padStart(user.id, 9, '0') + folio,
+      folio: 0,
       fecha: fecha,
       artid: selectCatalogo.id,
       grupo: selectCatalogo.grupo,
@@ -74,7 +81,7 @@ export class CarritoService {
     let newResumen: any = {
       subTotalT0: 0,
       subTotalT16: 0,
-      iva: 0,
+      iva16: 0,
       Total: 0
     };
     let IVA: any;
@@ -82,22 +89,23 @@ export class CarritoService {
     if (!carritoRef) {
       _.forEach(newDetalle, (value: any, i: any, array: any) => {
         array[i].index = _.padStart(i + 1, 9, '0');
+        array[i].folio = _.padStart(user.id, 9, '0') + folio,
         array[i].importe = array[i].cantidad * array[i].precio;
         console.log('array[i].impuesto: ', array[i].impuesto)
         if (array[i].impuesto == 0) { newResumen.subTotalT0 += array[i].importe, 2 }
         if (array[i].impuesto == 16) {
           IVA = Number(array[i].impuesto) / 100;
-          console.log('IVA: ', IVA)
+          //console.log('IVA: ', IVA)
           newResumen.subTotalT16 += (array[i].importe / (1 + IVA));
-          newResumen.iva = ((newResumen.subTotalT16 * Number(array[i].impuesto)) / 100);
+          newResumen.iva16 = ((newResumen.subTotalT16 * Number(array[i].impuesto)) / 100);
         }
       });
       newResumen.subTotalT0 = _.round(newResumen.subTotalT0, 2);
       newResumen.subTotalT16 = _.round(newResumen.subTotalT16, 2);
-      newResumen.iva = _.round(newResumen.iva, 2);
-      newResumen.Total = newResumen.subTotalT0 + newResumen.subTotalT16 + newResumen.iva;
+      newResumen.iva16 = _.round(newResumen.iva16, 2);
+      newResumen.Total = newResumen.subTotalT0 + newResumen.subTotalT16 + newResumen.iva16;
       carrito = {
-        resumen: [newResumen],
+        resumen: newResumen,
         detalle: newDetalle,
         updated: new Date().getTime(),
         created: new Date().getTime()
@@ -115,20 +123,21 @@ export class CarritoService {
     _.forEach(detalle, (value: any, i: any, array: any) => {
       array[i].index = _.padStart(i + 1, 9, '0');
       array[i].importe = array[i].cantidad * array[i].precio;
+      array[i].folio = _.padStart(user.id, 9, '0') + folio,
       console.log('array[i].impuesto: ', array[i].impuesto)
       console.log('array[i].impuesto: ', Number(array[i].impuesto))
       if (array[i].impuesto == 0) { newResumen.subTotalT0 += array[i].importe }
       if (array[i].impuesto == 16) {
         IVA = Number(array[i].impuesto) / 100;
-        console.log('IVA: ', IVA)
+        //console.log('IVA: ', IVA)
         newResumen.subTotalT16 += (array[i].importe / (1 + IVA));
-        newResumen.iva = ((newResumen.subTotalT16 * Number(array[i].impuesto)) / 100);
+        newResumen.iva16 = ((newResumen.subTotalT16 * Number(array[i].impuesto)) / 100);
       }
     });
     newResumen.subTotalT0 = _.round(newResumen.subTotalT0, 2);
     newResumen.subTotalT16 = _.round(newResumen.subTotalT16, 2);
-    newResumen.iva = _.round(newResumen.iva, 2);
-    newResumen.Total = newResumen.subTotalT0 + newResumen.subTotalT16 + newResumen.iva;
+    newResumen.iva16 = _.round(newResumen.iva16, 2);
+    newResumen.Total = newResumen.subTotalT0 + newResumen.subTotalT16 + newResumen.iva16;
     carrito.detalle = detalle;
     carrito.resumen = newResumen;
     carrito.updated = new Date().getTime();
@@ -139,6 +148,12 @@ export class CarritoService {
   getCarrito() {
     //console.log('has service carrito this.Carrito$: ', this.Carrito$)
     return this.Carrito$;
+  }
+
+  cancelarCarrito() {
+    const user = this.auth.getCurrentUser();
+    localStorage.removeItem(`carrito:${user.emailuser}`);
+    this.carritoChanged$.next(true);
   }
 
 }
