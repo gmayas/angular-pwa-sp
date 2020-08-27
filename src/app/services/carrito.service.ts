@@ -28,22 +28,16 @@ export class CarritoService {
 
   getInicialCarrito() {
     combineLatest(this.auth.user(), this.carritoChanged$)
-      //.pipe(debounceTime(500))
       .subscribe((user: any) => {
-        //console.log('user: ', user)
         if (!user) return this.Carrito$.next({});
         let carritoRef = JSON.parse(localStorage.getItem(`carrito:${user[0].emailuser}`));
-        //console.log('has carritoRef: ', carritoRef)
-        //console.log('has carritoRef.detalle: ', _.has(carritoRef, 'detalle'))
         if (_.has(carritoRef, 'detalle')) {
           try {
-            //console.log('has carritoRef service final: ', carritoRef)
             this.Carrito$.next(carritoRef);
           } catch (err) {
             console.error('ERROR CarritoService', err);
           }
         } else {
-          //console.log('has else')
           this.Carrito$.next({});
         }
       });
@@ -55,7 +49,7 @@ export class CarritoService {
     let fecha = new Date();
     let detalle: any = [];
     let carrito: any = {}
-    if (!( Number(selectCatalogo.impuesto) == 0 || Number(selectCatalogo.impuesto) == 16 )){
+    if (!(Number(selectCatalogo.impuesto) == 0 || Number(selectCatalogo.impuesto) == 16)) {
       this.toastr.warning('Hola: No se reconoce el impuesto del articulo.', 'Aviso de Angular 9', {
         timeOut: 10000,
         positionClass: 'toast-bottom-right'
@@ -89,13 +83,11 @@ export class CarritoService {
     if (!carritoRef) {
       _.forEach(newDetalle, (value: any, i: any, array: any) => {
         array[i].index = _.padStart(i + 1, 9, '0');
-        array[i].folio = _.padStart(user.id, 9, '0') + folio,
+        array[i].folio = _.padStart(user.id, 9, '0') + folio;
         array[i].importe = array[i].cantidad * array[i].precio;
-        console.log('array[i].impuesto: ', array[i].impuesto)
         if (array[i].impuesto == 0) { newResumen.subTotalT0 += array[i].importe, 2 }
         if (array[i].impuesto == 16) {
           IVA = Number(array[i].impuesto) / 100;
-          //console.log('IVA: ', IVA)
           newResumen.subTotalT16 += (array[i].importe / (1 + IVA));
           newResumen.iva16 = ((newResumen.subTotalT16 * Number(array[i].impuesto)) / 100);
         }
@@ -113,7 +105,6 @@ export class CarritoService {
       localStorage.setItem(`carrito:${user.emailuser}`, JSON.stringify(carrito));
       if (!next) {
         this.carritoChanged$.next(true);
-        console.log('this.carritoChanged$: ', true)
       }
       return;
     }
@@ -122,14 +113,11 @@ export class CarritoService {
     detalle.push(newDetalle[0]);
     _.forEach(detalle, (value: any, i: any, array: any) => {
       array[i].index = _.padStart(i + 1, 9, '0');
+      array[i].folio = _.padStart(user.id, 9, '0') + folio;
       array[i].importe = array[i].cantidad * array[i].precio;
-      array[i].folio = _.padStart(user.id, 9, '0') + folio,
-      console.log('array[i].impuesto: ', array[i].impuesto)
-      console.log('array[i].impuesto: ', Number(array[i].impuesto))
       if (array[i].impuesto == 0) { newResumen.subTotalT0 += array[i].importe }
       if (array[i].impuesto == 16) {
         IVA = Number(array[i].impuesto) / 100;
-        //console.log('IVA: ', IVA)
         newResumen.subTotalT16 += (array[i].importe / (1 + IVA));
         newResumen.iva16 = ((newResumen.subTotalT16 * Number(array[i].impuesto)) / 100);
       }
@@ -146,7 +134,6 @@ export class CarritoService {
   };
 
   getCarrito() {
-    //console.log('has service carrito this.Carrito$: ', this.Carrito$)
     return this.Carrito$;
   }
 
@@ -156,4 +143,22 @@ export class CarritoService {
     this.carritoChanged$.next(true);
   }
 
-}
+  registrarCompra() {
+    try {
+      const user = this.auth.getCurrentUser();
+      let api_url: any = environment.api_url + '/spproject/regCompra', params: any = {}, headers: any;
+      headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'token': localStorage.getItem('jwtToken')
+      });
+      //
+      let carritoRef = JSON.parse(localStorage.getItem(`carrito:${user.emailuser}`));
+      return this.http.post(api_url, carritoRef, { headers })
+        .pipe(map((data: any) => {
+          return data;
+        }));
+    } catch (e) {
+      console.log('error profile: ', e)
+    }
+  }
+};

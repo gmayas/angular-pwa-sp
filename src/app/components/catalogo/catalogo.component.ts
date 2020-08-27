@@ -33,7 +33,6 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
     private formBuilder: FormBuilder, private route: ActivatedRoute,
     private router: Router, private toastr: ToastrService) {
     this.user = this.auth.user();
-    //console.log('this.user.id: ', _.get(this.user.value, 'id'))
     this.getCatalogo(null);
   }
 
@@ -62,7 +61,6 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
     this.submitted = true;
     this.loading = true;
     //
-    //console.log('this.adminForm.invalid: ', this.adminForm.invalid);
     console.log('this.adminForm.value: ', this.catalogoForm.value);
     // stop here if form is invalid
     if (this.catalogoForm.invalid) {
@@ -78,14 +76,10 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
     this.loading = false;
     this.catalogoService.selectCatalogo = new catalogoModel();
     this.catalogoForm.reset();
-    //console.log('this.adminForm.value: ', this.adminForm.value);
   }
 
   addCarrito(art: any) {
     this.catalogoService.selectCatalogo = Object.assign({}, art);
-    //let cantidad = parseFloat((document.getElementById("cantidad") as HTMLInputElement).value);
-    //this.catalogoService.selectCatalogo.cantidad = cantidad
-    console.log('add selectCatalogo: ', this.catalogoService.selectCatalogo)
     this.carritoService.addCarrito(this.catalogoService.selectCatalogo);
     this.submitted = false;
     this.loading = false;
@@ -95,7 +89,6 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
   deleteCatalogo(vh: any) {
     // pendiente
     this.catalogoService.selectCatalogo = Object.assign({}, vh);
-    //console.log('Edit selectCatalogo: ', this.catalogoService.selectCatalogo);
   }
 
 
@@ -103,7 +96,6 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
     try {
       this.catalogoService.getCatalogoArt(dataInt)
         .subscribe((data: any) => {
-          //console.log('data: ', data);
           this.Articulos = data.data;
           this.toastr.success('Hello: Successful search.', 'Aviso de Angular 9', {
             timeOut: 10000,
@@ -122,6 +114,8 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
         });
     } catch (e) {
       console.log('error: ', e);
+      this.auth.logout();
+      this.router.navigate(['home']);
     }
   }
 
@@ -129,7 +123,6 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
     try {
       this.catalogoService.getCatalogo(id)
         .subscribe((data: any) => {
-          //console.log('data: ', data);
           this.Articulos = data.data;
           this.toastr.success('Hello: Successful search..', 'Aviso de Angular 9', {
             timeOut: 10000,
@@ -144,6 +137,8 @@ export class CatalogoComponent implements OnInit, OnDestroy, OnChanges {
           this.router.navigate(['home']);
         });
     } catch (e) {
+      this.auth.logout();
+      this.router.navigate(['home']);
       console.log('error: ', e);
     }
   }

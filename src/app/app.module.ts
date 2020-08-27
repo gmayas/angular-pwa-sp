@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthGuard } from './guards/auth.guard';
 import { CatalogoComponent } from './components/catalogo/catalogo.component';
 import { CarritoComponent } from './components/carrito/carrito.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'//'@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -27,7 +28,6 @@ import { CarritoComponent } from './components/carrito/carrito.component';
     RegisterComponent,
     CatalogoComponent,
     CarritoComponent
-  
   ],
   imports: [
     BrowserModule,
@@ -37,7 +37,8 @@ import { CarritoComponent } from './components/carrito/carrito.component';
     HttpClientModule,
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    NgbModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
