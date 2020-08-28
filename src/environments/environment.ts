@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost:3000/api'
-  //api_url: 'https://gpsapiproject.herokuapp.com/api'
+  //api_url: 'http://localhost:5000/api'
+  //https://api-gral-gmayas-prbs.herokuapp.com/
+  api_url: 'https://api-gral-gmayas-prbs.herokuapp.com/api'
 };
 
 /*

@@ -32,7 +32,6 @@ export class CatalogoService {
           'token': localStorage.getItem('jwtToken')
         })
       };
-      //console.log('httpOptions: ', httpOptions)
       if (_.isNil(id)) {
         urlInt = environment.api_url + `/spproject/getCatalogo`;
       } else {
@@ -40,7 +39,6 @@ export class CatalogoService {
       }
       return this.http.get(urlInt, httpOptions)
         .pipe(map((data: any) => {
-          //console.log('data: ', data)
           return data;
         }));
     } catch (e) {
@@ -68,7 +66,6 @@ export class CatalogoService {
 
   getCatalogoArt(dataIn: any) {
     try {
-      console.log('dataIn: ', dataIn);
       let params: any = {
         grupo: _.get(dataIn, 'grupo',''),
         claveart: _.get(dataIn, 'claveart',''),
@@ -78,12 +75,10 @@ export class CatalogoService {
         'Content-Type': 'application/json',
         'token': localStorage.getItem('jwtToken')
       });
-      //console.log('params: ', params);
       let api_url: any = environment.api_url + `/spproject/getCatalogoArt`;
       console.log('api_url: ', api_url)
       return this.http.get(api_url, { params, headers })
         .pipe(map((data: any) => {
-          console.log('data: ', data)
           return data;
         }));
     } catch (e) {
@@ -116,12 +111,8 @@ export class CatalogoService {
       } else {
         api_url = environment.api_url + `/spproject/updateArticulo/${params.id}`
       };
-      //console.log('environment.api_url: ', api_url)
-      //console.log('dataArticulo: ', dataArticulo);
-      //console.log('headers: ', headers);
       return this.http.post(api_url, dataArticulo, { headers })
         .pipe(map((data: any) => {
-          //console.log('data: ', data)
           return data;
         }));
     } catch (e) {

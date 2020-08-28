@@ -1,6 +1,6 @@
 {
-  "name": "pwa-gmayas-angular",
-  "short_name": "pwa-gmayas-angular",
+  "name": "angular-pwa-sp",
+  "short_name": "angular-pwa-sp",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

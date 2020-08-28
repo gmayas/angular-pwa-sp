@@ -30,8 +30,7 @@
   "dataGroups": [
     {
       "name": "gmayas-api",
-      "urls": ["https://gpsapiproject.herokuapp.com/api/user/userVehicles/null",
-               "https://maps.googleapis.com/maps/api/js/AuthenticationService.Authenticate?1shttp%3A%2F%2Flocalhost%3A8000%2Fadmin&5shttp%3A%2F%2Flocalhost%3A8000%2Fadmin&callback=_xdc_._8nw226&token=22483"],
+      "urls": ["https://api-gral-gmayas-prbs.herokuapp.com/api/spproject/getCatalogo"],
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 20,
